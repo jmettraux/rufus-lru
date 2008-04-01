@@ -1,0 +1,11 @@
+
+= rufus-lru CHANGELOG.txt
+
+
+== rufus-lru - 1.0.2    released 2008/01/18
+
+todo #17103 : merge! now respecting maxsize
+
+
+== rufus-lru - 1.0.1    released 2008/01/15
+
