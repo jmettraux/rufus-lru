@@ -53,9 +53,9 @@ http://rubyforge.org/tracker/?atid=18584&group_id=4812&func=browse
 
 == source
 
-http://rufus.rubyforge.org/svn/trunk/lru
+http://github.com/jmettraux/rufus-lru/tree/master
 
-    svn checkout http://rufus.rubyforge.org/svn/trunk/lru
+    git clone git://github.com/jmettraux/rufus-verbs.git
 
 
 == author
