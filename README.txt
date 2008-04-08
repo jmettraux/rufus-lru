@@ -53,15 +53,20 @@ http://rubyforge.org/tracker/?atid=18584&group_id=4812&func=browse
 
 == source
 
-http://github.com/jmettraux/rufus-lru/tree/master
+http://github.com/jmettraux/rufus-lru
 
-    git clone git://github.com/jmettraux/rufus-verbs.git
+    git clone git://github.com/jmettraux/rufus-lru.git
 
 
 == author
 
 John Mettraux, jmettraux@gmail.com 
 http://jmettraux.wordpress.com
+
+
+== the rest of Rufus
+
+http://rufus.rubyforge.org
 
 
 == license
