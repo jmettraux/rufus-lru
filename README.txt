@@ -43,7 +43,7 @@ None.
 
 On the rufus-ruby list[http://groups.google.com/group/rufus-ruby] :
 
-    http://groups.google.com/group/rufus-ruby
+  http://groups.google.com/group/rufus-ruby
 
 
 == issue tracker
@@ -51,11 +51,16 @@ On the rufus-ruby list[http://groups.google.com/group/rufus-ruby] :
 http://rubyforge.org/tracker/?atid=18584&group_id=4812&func=browse
 
 
+== irc
+
+irc.freenode.net #ruote
+
+
 == source
 
 http://github.com/jmettraux/rufus-lru
 
-    git clone git://github.com/jmettraux/rufus-lru.git
+  git clone git://github.com/jmettraux/rufus-lru.git
 
 
 == author

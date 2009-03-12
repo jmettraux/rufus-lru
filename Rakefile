@@ -5,8 +5,10 @@ require 'rake'
 require 'rake/clean'
 require 'rake/packagetask'
 require 'rake/gempackagetask'
-require 'rake/rdoctask'
 require 'rake/testtask'
+
+#require 'rake/rdoctask'
+require 'hanna/rdoctask'
 
 
 RUFUS_LRU_VERSION = "1.0.2"
@@ -34,8 +36,8 @@ spec = Gem::Specification.new do |s|
   #s.add_dependency('libxml-ruby')
 
   files = FileList[ "{bin,docs,lib,test}/**/*" ]
-  files.exclude "rdoc" 
-  files.exclude "extras" 
+  files.exclude "rdoc"
+  files.exclude "extras"
   s.files = files.to_a
 end
 
@@ -83,31 +85,31 @@ end
 #
 # DOCUMENTATION
 
-#ALLISON=`allison --path`
-ALLISON="/Library/Ruby/Gems/1.8/gems/allison-2.0.3/lib/allison.rb"
-
 Rake::RDocTask.new do |rd|
 
-  rd.main = "README.txt"
-
-  rd.rdoc_dir = "html/rufus-lru"
-
+  rd.main = 'README.txt'
+  rd.rdoc_dir = 'html/rufus-lru'
   rd.rdoc_files.include(
-    "README.txt", "CHANGELOG.txt", "LICENSE.txt", "lib/**/*.rb")
-
-  rd.title = "rufus-lru rdoc"
-
+    'README.txt',
+    'CHANGELOG.txt',
+    'LICENSE.txt',
+    #'CREDITS.txt',
+    'lib/**/*.rb')
+  #rd.rdoc_files.exclude('lib/tokyotyrant.rb')
+  rd.title = 'rufus-lru rdoc'
   rd.options << '-N' # line numbers
   rd.options << '-S' # inline source
+end
 
-  rd.template = ALLISON if File.exist?(ALLISON)
+task :rrdoc => :rdoc do
+  FileUtils.cp('doc/rdoc-style.css', 'html/rufus-lru/')
 end
 
 
 #
 # WEBSITE
 
-task :upload_website => [ :clean, :rdoc ] do
+task :upload_website => [ :clean, :rrdoc ] do
 
   account = "jmettraux@rubyforge.org"
   webdir = "/var/www/gforge-projects/rufus"

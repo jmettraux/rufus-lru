@@ -1,6 +1,6 @@
 #
 #--
-# Copyright (c) 2007-2008, John Mettraux, jmettraux@gmail.com
+# Copyright (c) 2007-2009, John Mettraux, jmettraux@gmail.com
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -39,7 +39,7 @@
 #   require 'rubygems'
 #   require 'rufus/lru'
 #
-#   h = LruHash.new 3
+#   h = LruHash.new(3)
 #
 #   5.times { |i| h[i] = "a" * i }
 #
@@ -51,13 +51,6 @@
 #
 #
 class LruHash < Hash
-
-  #--
-  #include MonitorMixin
-    #
-    # seems not necessary for now, and it collides with expool's
-    # @monitors own sync
-  #++
 
   attr_reader :maxsize
 
@@ -96,7 +89,7 @@ class LruHash < Hash
 
     value = super
     return nil unless value
-    touch key
+    touch(key)
 
     value
   end
@@ -105,7 +98,7 @@ class LruHash < Hash
 
     remove_lru
     super
-    touch key
+    touch(key)
 
     value
   end
@@ -120,7 +113,7 @@ class LruHash < Hash
   def delete (key)
 
     value = super
-    @lru_keys.delete key
+    @lru_keys.delete(key)
 
     value
   end
@@ -133,7 +126,7 @@ class LruHash < Hash
     #
     def touch (key)
 
-      @lru_keys.delete key
+      @lru_keys.delete(key)
       @lru_keys << key
     end
 
@@ -145,8 +138,8 @@ class LruHash < Hash
 
       while size >= @maxsize
 
-        key = @lru_keys.delete_at 0
-        delete key
+        key = @lru_keys.delete_at(0)
+        delete(key)
       end
     end
 end
