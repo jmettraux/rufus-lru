@@ -2,9 +2,10 @@
 = rufus-lru CHANGELOG.txt
 
 
-== rufus-lru - 1.0.3    not yet released
+== rufus-lru - 1.0.3    released 2010/01/24
 
 - 2010 refresh
+
 
 == rufus-lru - 1.0.2    released 2008/01/18
 

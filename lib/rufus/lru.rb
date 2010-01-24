@@ -23,6 +23,13 @@
 #++
 
 
+module Rufus
+module Lru
+  VERSION = '1.0.3'
+end
+end
+
+
 #
 # A Hash that has a max size. After the maxsize has been reached, the
 # least recently used entries (LRU hence), will be discared to make

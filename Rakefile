@@ -1,118 +1,77 @@
 
+
+require 'lib/rufus/lru.rb'
+
 require 'rubygems'
-
 require 'rake'
+
+
+#
+# CLEAN
+
 require 'rake/clean'
-require 'rake/packagetask'
-require 'rake/gempackagetask'
-require 'rake/testtask'
+CLEAN.include('pkg', 'tmp', 'html')
+task :default => [ :clean ]
 
-#require 'rake/rdoctask'
-require 'hanna/rdoctask'
-
-
-RUFUS_LRU_VERSION = "1.0.2"
 
 #
-# GEM SPEC
+# GEM
 
-spec = Gem::Specification.new do |s|
+require 'jeweler'
 
-  s.name        = "rufus-lru"
-  s.version       = RUFUS_LRU_VERSION
-  s.authors       = [ "John Mettraux" ]
-  s.email       = "jmettraux@gmail.com"
-  s.homepage      = "http://rufus.rubyforge.org/rufus-lru"
-  s.platform      = Gem::Platform::RUBY
-  s.summary       = "LruHash class, a Hash with a max size, controlled by a LRU mechanism"
-  #s.license       = "MIT"
+Jeweler::Tasks.new do |gem|
 
-  s.require_path    = "lib"
-  #s.autorequire     = "rufus-verbs"
-  s.test_file     = "test/test.rb"
-  s.has_rdoc      = true
-  s.extra_rdoc_files  = [ 'README.txt' ]
-  #s.requirements    << 'libxml-ruby'
-  #s.add_dependency('libxml-ruby')
+  gem.version = Rufus::Lru::VERSION
+  gem.name = 'rufus-lru'
+  gem.summary = 'LruHash class, a Hash with a max size, controlled by a LRU mechanism'
 
-  files = FileList[ "{bin,docs,lib,test}/**/*" ]
-  files.exclude "rdoc"
-  files.exclude "extras"
-  s.files = files.to_a
+  gem.description = %{
+    LruHash class, a Hash with a max size, controlled by a LRU mechanism
+  }
+  gem.email = 'jmettraux@gmail.com'
+  gem.homepage = 'http://github.com/jmettraux/rufus-lru/'
+  gem.authors = [ 'John Mettraux' ]
+  gem.rubyforge_project = 'rufus'
+
+  gem.test_file = 'test/test.rb'
+
+  #gem.add_dependency 'json'
+  gem.add_development_dependency 'yard', '>= 0'
+
+  # gemspec spec : http://www.rubygems.org/read/chapter/20
 end
-
-#
-# tasks
-
-CLEAN.include("pkg", "html", "rdoc")
-
-task :default => [ :clean, :repackage ]
+Jeweler::GemcutterTasks.new
 
 
 #
-# TESTING
+# DOC
 
-Rake::TestTask.new(:test) do |t|
-  t.libs << "test"
-  t.test_files = FileList['test/test.rb']
-  t.verbose = true
-end
+begin
 
-#
-# PACKAGING
+  require 'yard'
 
-Rake::GemPackageTask.new(spec) do |pkg|
-  #pkg.need_tar = true
-end
+  YARD::Rake::YardocTask.new do |doc|
+    doc.options = [
+      '-o', 'html/rufus-lru', '--title',
+      "rufus-lru #{Rufus::Lru::VERSION}"
+    ]
+  end
 
-Rake::PackageTask.new("rufus-lru", RUFUS_LRU_VERSION) do |pkg|
-  pkg.need_zip = true
-  pkg.package_files = FileList[
-    "Rakefile",
-    "*.txt",
-    "lib/**/*",
-    "test/**/*"
-  ].to_a
-  #pkg.package_files.delete("MISC.txt")
-  class << pkg
-    def package_name
-      "#{@name}-#{@version}-src"
-    end
+rescue LoadError
+
+  task :yard do
+    abort "YARD is not available : sudo gem install yard"
   end
 end
 
 
 #
-# DOCUMENTATION
+# TO THE WEB
 
-Rake::RDocTask.new do |rd|
+task :upload_website => [ :clean, :yard ] do
 
-  rd.main = 'README.txt'
-  rd.rdoc_dir = 'html/rufus-lru'
-  rd.rdoc_files.include(
-    'README.txt',
-    'CHANGELOG.txt',
-    'LICENSE.txt',
-    #'CREDITS.txt',
-    'lib/**/*.rb')
-  #rd.rdoc_files.exclude('lib/tokyotyrant.rb')
-  rd.title = 'rufus-lru rdoc'
-  rd.options << '-N' # line numbers
-  rd.options << '-S' # inline source
-end
-
-task :rrdoc => :rdoc do
-  FileUtils.cp('doc/rdoc-style.css', 'html/rufus-lru/')
-end
-
-
-#
-# WEBSITE
-
-task :upload_website => [ :clean, :rrdoc ] do
-
-  account = "jmettraux@rubyforge.org"
-  webdir = "/var/www/gforge-projects/rufus"
+  account = 'jmettraux@rubyforge.org'
+  webdir = '/var/www/gforge-projects/rufus'
 
   sh "rsync -azv -e ssh html/rufus-lru #{account}:#{webdir}/"
 end
