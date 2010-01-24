@@ -2,9 +2,13 @@
 = rufus-lru CHANGELOG.txt
 
 
+== rufus-lru - 1.0.3    not yet released
+
+- 2010 refresh
+
 == rufus-lru - 1.0.2    released 2008/01/18
 
-todo #17103 : merge! now respecting maxsize
+- todo #17103 : merge! now respecting maxsize
 
 
 == rufus-lru - 1.0.1    released 2008/01/15

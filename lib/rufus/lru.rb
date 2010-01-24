@@ -1,6 +1,5 @@
-#
 #--
-# Copyright (c) 2007-2009, John Mettraux, jmettraux@gmail.com
+# Copyright (c) 2007-2010, John Mettraux, jmettraux@gmail.com
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -19,16 +18,9 @@
 # LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
-#++
-#
-
 #
 # "made in Japan"
-#
-# John Mettraux
-#
-
-#require 'monitor'
+#++
 
 
 #
@@ -54,7 +46,6 @@ class LruHash < Hash
 
   attr_reader :maxsize
 
-  #
   # Initializes a LruHash with a given maxsize.
   #
   def initialize (maxsize)
@@ -77,7 +68,6 @@ class LruHash < Hash
     @lru_keys.clear
   end
 
-  #
   # Returns the keys with the lru in front.
   #
   def ordered_keys
@@ -120,27 +110,25 @@ class LruHash < Hash
 
   protected
 
-    #
-    # Puts the key on top of the lru 'stack'.
-    # The bottom being the lru place.
-    #
-    def touch (key)
+  # Puts the key on top of the lru 'stack'.
+  # The bottom being the lru place.
+  #
+  def touch (key)
 
-      @lru_keys.delete(key)
-      @lru_keys << key
+    @lru_keys.delete(key)
+    @lru_keys << key
+  end
+
+  # Makes sure that the hash fits its maxsize. If not, will remove
+  # the least recently used items.
+  #
+  def remove_lru
+
+    while size >= @maxsize
+
+      key = @lru_keys.delete_at(0)
+      delete(key)
     end
-
-    #
-    # Makes sure that the hash fits its maxsize. If not, will remove
-    # the least recently used items.
-    #
-    def remove_lru
-
-      while size >= @maxsize
-
-        key = @lru_keys.delete_at(0)
-        delete(key)
-      end
-    end
+  end
 end
 
