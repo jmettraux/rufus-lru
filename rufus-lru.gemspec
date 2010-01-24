@@ -16,12 +16,12 @@ Gem::Specification.new do |s|
   s.email = %q{jmettraux@gmail.com}
   s.extra_rdoc_files = [
     "LICENSE.txt",
-     "README.txt"
+     "README.rdoc"
   ]
   s.files = [
     "CHANGELOG.txt",
      "LICENSE.txt",
-     "README.txt",
+     "README.rdoc",
      "Rakefile",
      "doc/rdoc-style.css",
      "lib/rufus-lru.rb",
