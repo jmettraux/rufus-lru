@@ -1,78 +1,87 @@
 
-
-require 'lib/rufus/lru.rb'
+$:.unshift('.') # 1.9.2
 
 require 'rubygems'
+require 'rubygems/user_interaction' if Gem::RubyGemsVersion == '1.5.0'
+
 require 'rake'
-
-
-#
-# CLEAN
-
 require 'rake/clean'
-CLEAN.include('pkg', 'tmp', 'html')
-task :default => [ :clean ]
+#require 'rake/rdoctask'
+require 'rdoc/task'
 
 
 #
-# GEM
+# clean
 
-require 'jeweler'
+CLEAN.include('pkg', 'rdoc')
 
-Jeweler::Tasks.new do |gem|
 
-  gem.version = Rufus::Lru::VERSION
-  gem.name = 'rufus-lru'
-  gem.summary = 'LruHash class, a Hash with a max size, controlled by a LRU mechanism'
+#
+# test / spec
 
-  gem.description = %{
-    LruHash class, a Hash with a max size, controlled by a LRU mechanism
-  }
-  gem.email = 'jmettraux@gmail.com'
-  gem.homepage = 'http://github.com/jmettraux/rufus-lru/'
-  gem.authors = [ 'John Mettraux' ]
-  gem.rubyforge_project = 'rufus'
-
-  gem.test_file = 'test/test.rb'
-
-  #gem.add_dependency 'json'
-  gem.add_development_dependency 'yard', '>= 0'
-
-  # gemspec spec : http://www.rubygems.org/read/chapter/20
+#task :spec => :check_dependencies do
+task :spec do
+  exec 'rspec spec/'
 end
-Jeweler::GemcutterTasks.new
+task :test => :spec
+
+task :default => :spec
 
 
 #
-# DOC
+# gem
 
-begin
+GEMSPEC_FILE = Dir['*.gemspec'].first
+GEMSPEC = eval(File.read(GEMSPEC_FILE))
+GEMSPEC.validate
 
-  require 'yard'
 
-  YARD::Rake::YardocTask.new do |doc|
-    doc.options = [
-      '-o', 'html/rufus-lru', '--title',
-      "rufus-lru #{Rufus::Lru::VERSION}"
-    ]
-  end
+desc %{
+  builds the gem and places it in pkg/
+}
+task :build do
 
-rescue LoadError
+  sh "gem build #{GEMSPEC_FILE}"
+  sh "mkdir pkg" rescue nil
+  sh "mv #{GEMSPEC.name}-#{GEMSPEC.version}.gem pkg/"
+end
 
-  task :yard do
-    abort "YARD is not available : sudo gem install yard"
-  end
+desc %{
+  builds the gem and pushes it to rubygems.org
+}
+task :push => :build do
+
+  sh "gem push pkg/#{GEMSPEC.name}-#{GEMSPEC.version}.gem"
 end
 
 
 #
-# TO THE WEB
+# rdoc
+#
+# make sure to have rdoc 2.5.x to run that
 
-task :upload_website => [ :clean, :yard ] do
+Rake::RDocTask.new do |rd|
+
+  rd.main = 'README.txt'
+  rd.rdoc_dir = "rdoc/#{GEMSPEC.name}"
+
+  rd.rdoc_files.include('README.rdoc', 'CHANGELOG.txt', 'lib/**/*.rb')
+
+  rd.title = "#{GEMSPEC.name} #{GEMSPEC.version}"
+end
+
+
+#
+# upload_rdoc
+
+desc %{
+  upload the rdoc to rubyforge
+}
+task :upload_rdoc => [ :clean, :rdoc ] do
 
   account = 'jmettraux@rubyforge.org'
   webdir = '/var/www/gforge-projects/rufus'
 
-  sh "rsync -azv -e ssh html/rufus-lru #{account}:#{webdir}/"
+  sh "rsync -azv -e ssh rdoc/#{GEMSPEC.name} #{account}:#{webdir}/"
 end
 
