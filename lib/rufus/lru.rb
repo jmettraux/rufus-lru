@@ -26,117 +26,125 @@
 module Rufus
 module Lru
 
-  VERSION = '1.0.3'
-end
-end
+  VERSION = '1.0.4'
 
-
-#
-# A Hash that has a max size. After the maxsize has been reached, the
-# least recently used entries (LRU hence), will be discared to make
-# room for the new entries.
-#
-#   require 'rubygems'
-#   require 'rufus/lru'
-#
-#   h = LruHash.new(3)
-#
-#   5.times { |i| h[i] = "a" * i }
-#
-#   puts h.inspect # >> {2=>"aa", 3=>"aaa", 4=>"aaaa"}
-#
-#   h[:newer] = "b"
-#
-#   puts h.inspect # >> {:newer=>"b", 3=>"aaa", 4=>"aaaa"}
-#
-#
-class LruHash < Hash
-
-  attr_reader :maxsize
-
-  # Initializes a LruHash with a given maxsize.
   #
-  def initialize (maxsize)
-
-    super()
-
-    @maxsize = maxsize
-    @lru_keys = []
-  end
-
-  def maxsize= (s)
-
-    @maxsize = s
-    remove_lru
-  end
-
-  def clear
-
-    super
-    @lru_keys.clear
-  end
-
-  # Returns the keys with the lru in front.
+  # A Hash that has a max size. After the maxsize has been reached, the
+  # least recently used entries (LRU hence), will be discared to make
+  # room for the new entries.
   #
-  def ordered_keys
-
-    @lru_keys
-  end
-
-  def [] (key)
-
-    value = super
-    return nil unless value
-    touch(key)
-
-    value
-  end
-
-  def []= (key, value)
-
-    remove_lru
-    super
-    touch(key)
-
-    value
-  end
-
-  def merge! (hash)
-
-    hash.each { |k, v| self[k] = v }
-
-    # not using 'super', but in order not guaranteed at all...
-  end
-
-  def delete (key)
-
-    value = super
-    @lru_keys.delete(key)
-
-    value
-  end
-
-  protected
-
-  # Puts the key on top of the lru 'stack'.
-  # The bottom being the lru place.
+  #   require 'rubygems'
+  #   require 'rufus/lru'
   #
-  def touch (key)
-
-    @lru_keys.delete(key)
-    @lru_keys << key
-  end
-
-  # Makes sure that the hash fits its maxsize. If not, will remove
-  # the least recently used items.
+  #   h = LruHash.new(3)
   #
-  def remove_lru
+  #   5.times { |i| h[i] = "a" * i }
+  #
+  #   puts h.inspect # >> {2=>"aa", 3=>"aaa", 4=>"aaaa"}
+  #
+  #   h[:newer] = "b"
+  #
+  #   puts h.inspect # >> {:newer=>"b", 3=>"aaa", 4=>"aaaa"}
+  #
+  # Nota bene: this class is not threadsafe.
+  #
+  class Hash < ::Hash
 
-    while size >= @maxsize
+    attr_reader :maxsize
+    attr_reader :lru_keys
 
-      key = @lru_keys.delete_at(0)
-      delete(key)
+    # Initializes a LruHash with a given maxsize.
+    #
+    def initialize(maxsize)
+
+      super()
+
+      @maxsize = maxsize
+      @lru_keys = []
+    end
+
+    def maxsize=(s)
+
+      @maxsize = s
+      remove_lru
+    end
+
+    def clear
+
+      super
+      @lru_keys.clear
+    end
+
+    # Returns the keys with the lru in front.
+    #
+    alias ordered_keys lru_keys
+
+    def [](key)
+
+      value = super
+      return nil unless value
+      touch(key)
+
+      value
+    end
+
+    def []=(key, value)
+
+      remove_lru
+      super
+      touch(key)
+
+      value
+    end
+
+    def merge!(hash)
+
+      hash.each { |k, v| self[k] = v }
+
+      # not using 'super', but in order not guaranteed at all...
+    end
+
+    def delete(key)
+
+      value = super
+      @lru_keys.delete(key)
+
+      value
+    end
+
+    # Returns a regular Hash with the entries in this hash.
+    #
+    def to_h
+
+      {}.merge!(self)
+    end
+
+    protected
+
+    # Puts the key on top of the lru 'stack'.
+    # The bottom being the lru place.
+    #
+    def touch(key)
+
+      @lru_keys.delete(key)
+      @lru_keys << key
+    end
+
+    # Makes sure that the hash fits its maxsize. If not, will remove
+    # the least recently used items.
+    #
+    def remove_lru
+
+      while size >= @maxsize
+
+        key = @lru_keys.delete_at(0)
+        delete(key)
+      end
     end
   end
+end
+end
+
+class LruHash < Rufus::Lru::Hash
 end
 
