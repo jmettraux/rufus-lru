@@ -81,11 +81,11 @@ module Lru
 
     def [](key)
 
-      value = super
-      return nil unless value
+      return nil unless has_key?(key)
+
       touch(key)
 
-      value
+      super
     end
 
     def []=(key, value)

@@ -4,6 +4,7 @@
 
 == rufus-lru - 1.0.4    not yet released
 
+- fixed issue issue false values
 - 2012 refresh
 
 
