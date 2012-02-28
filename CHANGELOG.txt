@@ -2,7 +2,12 @@
 = rufus-lru CHANGELOG.txt
 
 
-== rufus-lru - 1.0.4    not yet released
+== rufus-lru - 1.0.5    not yet released
+
+- introduced Rufus::Lru::SynchronizedHash (thread-safe)
+
+
+== rufus-lru - 1.0.4    released 2012/02/28
 
 - fixed issue issue false values
 - 2012 refresh

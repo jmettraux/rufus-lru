@@ -22,11 +22,13 @@
 # "made in Japan"
 #++
 
+require 'thread'
+
 
 module Rufus
 module Lru
 
-  VERSION = '1.0.4'
+  VERSION = '1.0.5'
 
   #
   # A Hash that has a max size. After the maxsize has been reached, the
@@ -46,7 +48,8 @@ module Lru
   #
   #   puts h.inspect # >> {:newer=>"b", 3=>"aaa", 4=>"aaaa"}
   #
-  # Nota bene: this class is not threadsafe.
+  # Nota bene: this class is not thread-safe. If you need something thread-safe,
+  # use Rufus::Lru::SynchronizedHash.
   #
   class Hash < ::Hash
 
@@ -141,9 +144,34 @@ module Lru
       end
     end
   end
+
+  #
+  # A thread-safe version of the lru hash.
+  #
+  class SynchronizedHash < Hash
+
+    def initialize(maxsize)
+
+      super
+      @mutex = Mutex.new
+    end
+
+    def [](key)
+
+      @mutex.synchronize { super }
+    end
+
+    def []=(key, value)
+
+      @mutex.synchronize { super }
+    end
+  end
 end
 end
 
-class LruHash < Rufus::Lru::Hash
-end
+
+#
+# The original LruHash class, kept for backward compatibility.
+#
+class LruHash < Rufus::Lru::Hash; end
 

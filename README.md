@@ -17,7 +17,7 @@ Once the maxsize is reached, the hash will discard the element that was the
 least recently used (hence LRU).
 
     require 'rubygems'
-    require 'rufus/lru'
+    require 'rufus-lru'
 
     h = Rufus::Lru::Hash.new(3)
 
@@ -28,6 +28,15 @@ least recently used (hence LRU).
     h[:newer] = 'b'
 
     puts h.inspect # >> {:newer=>"b", 3=>"aaa", 4=>"aaaa"}
+
+Rufus::Lru::Hash isn't thread-safe, if you need something that is, use Rufus::Lru::SynchronizedHash
+
+    require 'rubygems'
+    require 'rufus-lru'
+
+    h = Rufus::Lru::SyncrhonizedHash.new(3)
+
+    # ...
 
 
 ## dependencies
