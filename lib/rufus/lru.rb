@@ -1,5 +1,5 @@
 #--
-# Copyright (c) 2007-2010, John Mettraux, jmettraux@gmail.com
+# Copyright (c) 2007-2012, John Mettraux, jmettraux@gmail.com
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -25,6 +25,7 @@
 
 module Rufus
 module Lru
+
   VERSION = '1.0.3'
 end
 end
