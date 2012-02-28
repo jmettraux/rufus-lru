@@ -63,16 +63,19 @@ module Lru
       @lru_keys = []
     end
 
-    def maxsize=(s)
+    def maxsize=(i)
 
-      @maxsize = s
+      @maxsize = i
       remove_lru
+
+      i
     end
 
     def clear
 
-      super
       @lru_keys.clear
+
+      super
     end
 
     # Returns the keys with the lru in front.
@@ -91,10 +94,9 @@ module Lru
     def []=(key, value)
 
       remove_lru
-      super
       touch(key)
 
-      value
+      super
     end
 
     def merge!(hash)
@@ -106,10 +108,9 @@ module Lru
 
     def delete(key)
 
-      value = super
       @lru_keys.delete(key)
 
-      value
+      super
     end
 
     # Returns a regular Hash with the entries in this hash.
@@ -136,9 +137,7 @@ module Lru
     def remove_lru
 
       while size >= @maxsize
-
-        key = @lru_keys.delete_at(0)
-        delete(key)
+        delete(@lru_keys.delete_at(0))
       end
     end
   end
