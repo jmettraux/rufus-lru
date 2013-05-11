@@ -34,7 +34,7 @@ Rufus::Lru::Hash isn't thread-safe, if you need something that is, use Rufus::Lr
     require 'rubygems'
     require 'rufus-lru'
 
-    h = Rufus::Lru::SyncrhonizedHash.new(3)
+    h = Rufus::Lru::SynchronizedHash.new(3)
 
     # ...
 
