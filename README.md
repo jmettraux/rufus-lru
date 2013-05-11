@@ -70,8 +70,12 @@ http://github.com/jmettraux/rufus-lru
 
 ## author
 
-John Mettraux, jmettraux@gmail.com
-http://jmettraux.wordpress.com
+John Mettraux, jmettraux@gmail.com, http://lambda.io/jmettraux
+
+
+## contributors
+
+Baldur Gudbjornsson - https://github.com/baldur
 
 
 ## the rest of Rufus
