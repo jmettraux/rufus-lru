@@ -1,5 +1,5 @@
 #--
-# Copyright (c) 2007-2012, John Mettraux, jmettraux@gmail.com
+# Copyright (c) 2007-2013, John Mettraux, jmettraux@gmail.com
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -19,7 +19,7 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 #
-# "made in Japan"
+# "Made in Japan"
 #++
 
 require 'thread'

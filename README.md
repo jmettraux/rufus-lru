@@ -6,7 +6,15 @@ LruHash class, a Hash with a max size, controlled by a LRU mechanism.
 
 ## getting it
 
-    gem install rufus-lru
+```
+gem install rufus-lru
+```
+
+or simply add to your ```Gemfile```
+
+```
+gem 'rufus-lru'
+```
 
 
 ## usage
@@ -16,27 +24,31 @@ It's a regular hash, but you have to set a maxsize at instantiation.
 Once the maxsize is reached, the hash will discard the element that was the
 least recently used (hence LRU).
 
-    require 'rubygems'
-    require 'rufus-lru'
+```ruby
+require 'rubygems'
+require 'rufus-lru'
 
-    h = Rufus::Lru::Hash.new(3)
+h = Rufus::Lru::Hash.new(3)
 
-    5.times { |i| h[i] = "a" * i }
+5.times { |i| h[i] = "a" * i }
 
-    puts h.inspect # >> {2=>"aa", 3=>"aaa", 4=>"aaaa"}
+puts h.inspect # >> {2=>"aa", 3=>"aaa", 4=>"aaaa"}
 
-    h[:newer] = 'b'
+h[:newer] = 'b'
 
-    puts h.inspect # >> {:newer=>"b", 3=>"aaa", 4=>"aaaa"}
+puts h.inspect # >> {:newer=>"b", 3=>"aaa", 4=>"aaaa"}
+```
 
 Rufus::Lru::Hash isn't thread-safe, if you need something that is, use Rufus::Lru::SynchronizedHash
 
-    require 'rubygems'
-    require 'rufus-lru'
+```ruby
+require 'rubygems'
+require 'rufus-lru'
 
-    h = Rufus::Lru::SynchronizedHash.new(3)
+h = Rufus::Lru::SynchronizedHash.new(3)
 
-    # ...
+# ...
+```
 
 
 ## dependencies

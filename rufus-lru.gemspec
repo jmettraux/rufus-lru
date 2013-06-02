@@ -12,6 +12,7 @@ Gem::Specification.new do |s|
   s.email = [ 'jmettraux@gmail.com' ]
   s.homepage = 'http://github.com/jmettraux/rufus-lru'
   s.rubyforge_project = 'rufus'
+  s.license = 'MIT'
   s.summary = 'A Hash with a max size, controlled by a LRU mechanism'
 
   s.description = %{
