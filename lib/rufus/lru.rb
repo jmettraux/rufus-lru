@@ -48,7 +48,7 @@ module Lru
   #
   #   puts h.inspect # >> {:newer=>"b", 3=>"aaa", 4=>"aaaa"}
   #
-  # One may want to squeeze haash manually
+  # One may want to squeeze hash manually
   #
   #   h = LruHash.new(3, true)
   #   # or h.squeeze_on_demand=true after h is created

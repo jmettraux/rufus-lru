@@ -127,7 +127,9 @@ describe Rufus::Lru::Hash do
 
     it 'may squeeze on demand' do
 
+      hash.squeeze_on_demand?.class.should == FalseClass
       hash.squeeze_on_demand = true
+      hash.squeeze_on_demand?.class.should == TrueClass
 
       5.times { |i| hash[i] = i }
       hash.size.should == 5
