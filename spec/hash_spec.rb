@@ -122,5 +122,19 @@ describe Rufus::Lru::Hash do
       hash.to_h.should == { 1 => 1, 2 => 2, 3 => 3 }
     end
   end
+
+  describe '#squeeze!' do
+
+    it 'may squeeze on demand' do
+
+      hash.squeeze_on_demand = true
+
+      5.times { |i| hash[i] = i }
+      hash.size.should == 5
+
+      hash.squeeze!
+      hash.size.should == 2
+    end
+  end
 end
 

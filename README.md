@@ -50,6 +50,16 @@ h = Rufus::Lru::SynchronizedHash.new(3)
 # ...
 ```
 
+It's possible to squeeze LruHash manually:
+
+```ruby
+h = Rufus::Lru::Hash.new(33, true)
+# or h.squeeze_on_demand=true
+.
+.
+h.squeeze!
+```
+
 
 ## dependencies
 
