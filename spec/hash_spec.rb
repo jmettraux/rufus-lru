@@ -122,5 +122,41 @@ describe Rufus::Lru::Hash do
       hash.to_h.should == { 1 => 1, 2 => 2, 3 => 3 }
     end
   end
+
+  describe '#squeeze!' do
+
+    it 'may squeeze on demand' do
+
+      hash.squeeze_on_demand?.class.should == FalseClass
+      hash.squeeze_on_demand = true
+      hash.squeeze_on_demand?.class.should == TrueClass
+
+      5.times { |i| hash[i] = i }
+      hash.size.should == 5
+
+      hash.squeeze!
+      hash.size.should == 2
+    end
+  end
+
+  context 'handling values with destructors' do
+
+    it 'calls value#clear upon key-value removal' do
+
+      hash.clear_value_on_removal = true
+      destructor_was_called = 0
+      value = nil
+      value.define_singleton_method :clear, lambda { destructor_was_called += 1 }
+
+      5.times { |i| hash[i] = value }
+      destructor_was_called.should == 2
+
+      hash.delete 4
+      destructor_was_called.should == 3
+
+      hash.clear
+      destructor_was_called.should == 5
+    end
+  end
 end
 

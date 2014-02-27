@@ -28,7 +28,7 @@ require 'thread'
 module Rufus
 module Lru
 
-  VERSION = '1.0.5'
+  VERSION = '1.0.6'
 
   #
   # A Hash that has a max size. After the maxsize has been reached, the
@@ -48,6 +48,19 @@ module Lru
   #
   #   puts h.inspect # >> {:newer=>"b", 3=>"aaa", 4=>"aaaa"}
   #
+  # One may want to squeeze hash manually
+  #
+  #   h = LruHash.new(3, true)
+  #   # or h.squeeze_on_demand=true after h is created
+  #   .
+  #   .
+  #   h.squeeze!
+  #
+  # If a value has destructor method #clear it may be called upon the key-value removal
+  #
+  #   h = LruHash.new(33, does_not_matter, true)
+  #   # or h.clear_value_on_removal=true after h is created
+  #
   # Nota bene: this class is not thread-safe. If you need something thread-safe,
   # use Rufus::Lru::SynchronizedHash.
   #
@@ -55,28 +68,45 @@ module Lru
 
     attr_reader :maxsize
     attr_reader :lru_keys
+    attr_accessor :clear_value_on_removal
 
     # Initializes a LruHash with a given maxsize.
     #
-    def initialize(maxsize)
+    def initialize(maxsize, squeeze_on_demand = false, clear_value_on_removal = false)
 
       super()
 
       @maxsize = maxsize
       @lru_keys = []
+      @squeeze_on_demand = squeeze_on_demand
+      @clear_value_on_removal = clear_value_on_removal
     end
 
     def maxsize=(i)
 
       @maxsize = i
-      remove_lru
+      squeeze! unless @squeeze_on_demand
 
       i
+    end
+
+    def squeeze_on_demand=(i)
+
+      squeeze! if @squeeze_on_demand && !i
+      @squeeze_on_demand = i
+
+    end
+
+    def squeeze_on_demand?
+
+      @squeeze_on_demand
     end
 
     def clear
 
       @lru_keys.clear
+
+      self.each_value { |value| value.clear if value.respond_to?(:clear) } if @clear_value_on_removal
 
       super
     end
@@ -96,7 +126,7 @@ module Lru
 
     def []=(key, value)
 
-      remove_lru
+      remove_lru unless @squeeze_on_demand
       touch(key)
 
       super
@@ -111,6 +141,11 @@ module Lru
 
     def delete(key)
 
+      if @clear_value_on_removal
+        value = self.fetch(key)
+        value.clear if value.respond_to?(:clear)
+      end
+
       @lru_keys.delete(key)
 
       super
@@ -122,6 +157,9 @@ module Lru
 
       {}.merge!(self)
     end
+
+    # public alias to remove_lru
+    def squeeze! ; remove_lru ; end
 
     protected
 
@@ -150,7 +188,7 @@ module Lru
   #
   class SynchronizedHash < Hash
 
-    def initialize(maxsize)
+    def initialize(maxsize, squeeze_on_demand = false)
 
       super
       @mutex = Mutex.new
@@ -162,6 +200,11 @@ module Lru
     end
 
     def []=(key, value)
+
+      @mutex.synchronize { super }
+    end
+
+    def squeeze!
 
       @mutex.synchronize { super }
     end

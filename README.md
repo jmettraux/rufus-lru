@@ -50,6 +50,29 @@ h = Rufus::Lru::SynchronizedHash.new(3)
 # ...
 ```
 
+It's possible to squeeze LruHash manually:
+
+```ruby
+h = Rufus::Lru::Hash.new(33, true)
+# or h.squeeze_on_demand=true
+.
+.
+h.squeeze!
+```
+
+If a value has destructor method #clear it may be called upon the key-value removal
+
+```ruby
+require 'rubygems'
+require 'rufus-lru'
+
+class ObjectWithDestructor; def clear ; puts 'Destructor called' ; end ; end
+
+h = LruHash.new(1, false, true) # or h.clear_value_on_removal=true after h is created
+h[:one] = ObjectWithDestructor.new
+h[:two] = nil                   # :one is being removed >> "Destructor called"
+```
+
 
 ## dependencies
 
