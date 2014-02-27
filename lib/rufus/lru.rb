@@ -56,7 +56,8 @@ module Lru
   #   .
   #   h.squeeze!
   #
-  # If a value has destructor method #clear it may be called upon the key-value removal
+  # If a value has destructor method #clear it may be called upon the
+  # key-value removal
   #
   #   h = LruHash.new(33, does_not_matter, true)
   #   # or h.clear_value_on_removal=true after h is created
@@ -106,7 +107,9 @@ module Lru
 
       @lru_keys.clear
 
-      self.each_value { |value| value.clear if value.respond_to?(:clear) } if @clear_value_on_removal
+      self.each_value { |value|
+        value.clear if value.respond_to?(:clear)
+      } if @clear_value_on_removal
 
       super
     end
