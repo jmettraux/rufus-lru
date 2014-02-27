@@ -91,10 +91,10 @@ module Lru
       i
     end
 
-    def squeeze_on_demand=(i)
+    def squeeze_on_demand=(b)
 
-      squeeze! if @squeeze_on_demand && !i
-      @squeeze_on_demand = i
+      squeeze! if @squeeze_on_demand && !b
+      @squeeze_on_demand = b
     end
 
     def squeeze_on_demand?
