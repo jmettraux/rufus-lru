@@ -145,8 +145,10 @@ describe Rufus::Lru::Hash do
 
       hash.clear_value_on_removal = true
       destructor_was_called = 0
-      value = nil
-      value.define_singleton_method :clear, lambda { destructor_was_called += 1 }
+
+      value = 'nada'
+      (class << value; self; end).send(
+        :define_method, :clear, lambda { destructor_was_called += 1 })
 
       5.times { |i| hash[i] = value }
       destructor_was_called.should == 2
