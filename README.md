@@ -108,14 +108,9 @@ http://github.com/jmettraux/rufus-lru
 John Mettraux, jmettraux@gmail.com, http://lambda.io/jmettraux
 
 
-## contributors
+## contributors and help
 
-Baldur Gudbjornsson - https://github.com/baldur
-
-
-## the rest of Rufus
-
-http://rufus.rubyforge.org
+see [CREDITS.txt](CREDITS.txt)
 
 
 ## license
