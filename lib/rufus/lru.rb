@@ -95,7 +95,6 @@ module Lru
 
       squeeze! if @squeeze_on_demand && !i
       @squeeze_on_demand = i
-
     end
 
     def squeeze_on_demand?
@@ -144,14 +143,12 @@ module Lru
 
     def delete(key)
 
-      if @clear_value_on_removal
-        value = self.fetch(key)
-        value.clear if value.respond_to?(:clear)
-      end
+      value = super
+      value.clear if @clear_value_on_removal && value.respond_to?(:clear)
 
       @lru_keys.delete(key)
 
-      super
+      value
     end
 
     # Returns a regular Hash with the entries in this hash.
