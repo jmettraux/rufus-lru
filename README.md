@@ -1,6 +1,8 @@
 
 # rufus-lru
 
+[![Build Status](https://secure.travis-ci.org/jmettraux/rufus-lru.png)](http://travis-ci.org/jmettraux/rufus-lru)
+
 LruHash class, a Hash with a max size, controlled by a LRU mechanism.
 
 
