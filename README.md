@@ -60,6 +60,19 @@ h = Rufus::Lru::Hash.new(33, true)
 h.squeeze!
 ```
 
+If a value has destructor method #clear it may be called upon the key-value expungement
+
+```ruby
+require 'rubygems'
+require 'rufus-lru'
+
+class ObjectWithDestructor; def clear ; puts 'Destructor called' ; end ; end
+
+h = LruHash.new(1, false, true) # or h.clear_value_on_expungement=true after h is created
+h[:one] = ObjectWithDestructor.new
+h[:two] = nil                   # :one is being expunged >> "Destructor called"
+```
+
 
 ## dependencies
 
