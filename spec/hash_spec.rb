@@ -141,9 +141,9 @@ describe Rufus::Lru::Hash do
 
   context 'handling values with destructors' do
 
-    it 'calls value#clear upon key-value expungement' do
+    it 'calls value#clear upon key-value removal' do
 
-      hash.clear_value_on_expungement = true
+      hash.clear_value_on_removal = true
       destructor_was_called = 0
       value = nil
       value.define_singleton_method :clear, lambda { destructor_was_called += 1 }

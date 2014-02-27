@@ -56,10 +56,10 @@ module Lru
   #   .
   #   h.squeeze!
   #
-  # If a value has destructor method #clear it may be called upon the key-value expungement
+  # If a value has destructor method #clear it may be called upon the key-value removal
   #
   #   h = LruHash.new(33, does_not_matter, true)
-  #   # or h.clear_value_on_expungement=true after h is created
+  #   # or h.clear_value_on_removal=true after h is created
   #
   # Nota bene: this class is not thread-safe. If you need something thread-safe,
   # use Rufus::Lru::SynchronizedHash.
@@ -68,18 +68,18 @@ module Lru
 
     attr_reader :maxsize
     attr_reader :lru_keys
-    attr_accessor :clear_value_on_expungement
+    attr_accessor :clear_value_on_removal
 
     # Initializes a LruHash with a given maxsize.
     #
-    def initialize(maxsize, squeeze_on_demand = false, clear_value_on_expungement = false)
+    def initialize(maxsize, squeeze_on_demand = false, clear_value_on_removal = false)
 
       super()
 
       @maxsize = maxsize
       @lru_keys = []
       @squeeze_on_demand = squeeze_on_demand
-      @clear_value_on_expungement = clear_value_on_expungement
+      @clear_value_on_removal = clear_value_on_removal
     end
 
     def maxsize=(i)
@@ -106,7 +106,7 @@ module Lru
 
       @lru_keys.clear
 
-      self.each_value { |value| value.clear if value.respond_to?(:clear) } if @clear_value_on_expungement
+      self.each_value { |value| value.clear if value.respond_to?(:clear) } if @clear_value_on_removal
 
       super
     end
@@ -141,7 +141,7 @@ module Lru
 
     def delete(key)
 
-      if @clear_value_on_expungement
+      if @clear_value_on_removal
         value = self.fetch(key)
         value.clear if value.respond_to?(:clear)
       end
