@@ -102,6 +102,11 @@ module Lru
       @squeeze_on_demand
     end
 
+    def clear_value_on_removal?
+
+      @clear_value_on_removal
+    end
+
     def clear
 
       @lru_keys.clear
