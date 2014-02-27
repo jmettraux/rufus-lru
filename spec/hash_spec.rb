@@ -138,5 +138,25 @@ describe Rufus::Lru::Hash do
       hash.size.should == 2
     end
   end
+
+  context 'handling values with destructors' do
+
+    it 'calls value#clear upon key-value expungement' do
+
+      hash.clear_value_on_expungement = true
+      destructor_was_called = 0
+      value = nil
+      value.define_singleton_method :clear, lambda { destructor_was_called += 1 }
+
+      5.times { |i| hash[i] = value }
+      destructor_was_called.should == 2
+
+      hash.delete 4
+      destructor_was_called.should == 3
+
+      hash.clear
+      destructor_was_called.should == 5
+    end
+  end
 end
 

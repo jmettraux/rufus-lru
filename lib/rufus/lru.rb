@@ -56,6 +56,11 @@ module Lru
   #   .
   #   h.squeeze!
   #
+  # If a value has destructor method #clear it may be called upon the key-value expungement
+  #
+  #   h = LruHash.new(33, does_not_matter, true)
+  #   # or h.clear_value_on_expungement=true after h is created
+  #
   # Nota bene: this class is not thread-safe. If you need something thread-safe,
   # use Rufus::Lru::SynchronizedHash.
   #
@@ -63,16 +68,18 @@ module Lru
 
     attr_reader :maxsize
     attr_reader :lru_keys
+    attr_accessor :clear_value_on_expungement
 
     # Initializes a LruHash with a given maxsize.
     #
-    def initialize(maxsize, squeeze_on_demand = false)
+    def initialize(maxsize, squeeze_on_demand = false, clear_value_on_expungement = false)
 
       super()
 
       @maxsize = maxsize
       @lru_keys = []
       @squeeze_on_demand = squeeze_on_demand
+      @clear_value_on_expungement = clear_value_on_expungement
     end
 
     def maxsize=(i)
@@ -98,6 +105,8 @@ module Lru
     def clear
 
       @lru_keys.clear
+
+      self.each_value { |value| value.clear if value.respond_to?(:clear) } if @clear_value_on_expungement
 
       super
     end
@@ -131,6 +140,11 @@ module Lru
     end
 
     def delete(key)
+
+      if @clear_value_on_expungement
+        value = self.fetch(key)
+        value.clear if value.respond_to?(:clear)
+      end
 
       @lru_keys.delete(key)
 
