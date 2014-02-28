@@ -93,7 +93,7 @@ module Lru
 
     def auto_squeeze=(b)
 
-      squeeze! if ! @auto_squeeze && b
+      squeeze! if b
       @auto_squeeze = b
     end
 
