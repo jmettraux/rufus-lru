@@ -73,33 +73,33 @@ module Lru
 
     # Initializes a LruHash with a given maxsize.
     #
-    def initialize(maxsize, squeeze_on_demand = false, clear_value_on_removal = false)
+    def initialize(maxsize, auto_squeeze=true, clear_value_on_removal=false)
 
       super()
 
       @maxsize = maxsize
       @lru_keys = []
-      @squeeze_on_demand = squeeze_on_demand
+      @auto_squeeze = auto_squeeze
       @clear_value_on_removal = clear_value_on_removal
     end
 
     def maxsize=(i)
 
       @maxsize = i
-      squeeze! unless @squeeze_on_demand
+      squeeze! if @auto_squeeze
 
       i
     end
 
-    def squeeze_on_demand=(b)
+    def auto_squeeze=(b)
 
-      squeeze! if @squeeze_on_demand && !b
-      @squeeze_on_demand = b
+      squeeze! if ! @auto_squeeze && b
+      @auto_squeeze = b
     end
 
-    def squeeze_on_demand?
+    def auto_squeeze?
 
-      @squeeze_on_demand
+      @auto_squeeze
     end
 
     def clear_value_on_removal?
@@ -133,7 +133,7 @@ module Lru
 
     def []=(key, value)
 
-      remove_lru unless @squeeze_on_demand
+      remove_lru if @auto_squeeze
       touch(key)
 
       super
@@ -164,7 +164,7 @@ module Lru
     end
 
     # public alias to remove_lru
-    def squeeze! ; remove_lru ; end
+    def squeeze!; remove_lru; end
 
     protected
 
@@ -191,9 +191,9 @@ module Lru
   #
   # A thread-safe version of the lru hash.
   #
-  class SynchronizedHash < Hash
+  class SynchronizedHash < Rufus::Lru::Hash
 
-    def initialize(maxsize, squeeze_on_demand = false)
+    def initialize(maxsize, auto_squeeze=true, clear_value_on_removal=false)
 
       super
       @mutex = Mutex.new

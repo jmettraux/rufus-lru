@@ -123,13 +123,42 @@ describe Rufus::Lru::Hash do
     end
   end
 
+  describe '#auto_squeeze?' do
+
+    it 'returns true by default' do
+
+      hash.auto_squeeze?.should == true
+    end
+  end
+
+  describe '#auto_squeeze=' do
+
+    it 'sets the auto_squeeze behaviour' do
+
+      hash.auto_squeeze = false
+      hash.auto_squeeze?.should == false
+
+      hash.auto_squeeze = true
+      hash.auto_squeeze?.should == true
+    end
+
+    it 'squeezes when passed true' do
+
+      hash.auto_squeeze = false
+
+      5.times { |i| hash[i] = i }
+      hash.size.should == 5
+
+      hash.auto_squeeze = true
+      hash.size.should == 2
+    end
+  end
+
   describe '#squeeze!' do
 
-    it 'may squeeze on demand' do
+    it 'squeezes' do
 
-      hash.squeeze_on_demand?.class.should == FalseClass
-      hash.squeeze_on_demand = true
-      hash.squeeze_on_demand?.class.should == TrueClass
+      hash.auto_squeeze = false
 
       5.times { |i| hash[i] = i }
       hash.size.should == 5
