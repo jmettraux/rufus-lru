@@ -69,7 +69,6 @@ module Lru
 
     attr_reader :maxsize
     attr_reader :lru_keys
-    attr_accessor :clear_value_on_removal
 
     # Initializes a LruHash with a given maxsize.
     #
@@ -97,15 +96,13 @@ module Lru
       @auto_squeeze = b
     end
 
-    def auto_squeeze?
+    def clear_value_on_removal=(b)
 
-      @auto_squeeze
+      @clear_value_on_removal = b
     end
 
-    def clear_value_on_removal?
-
-      @clear_value_on_removal
-    end
+    def auto_squeeze?; @auto_squeeze; end
+    def clear_value_on_removal?; @clear_value_on_removal; end
 
     def clear
 
