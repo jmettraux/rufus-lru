@@ -12,7 +12,7 @@ LruHash class, a Hash with a max size, controlled by a LRU mechanism.
 gem install rufus-lru
 ```
 
-or simply add to your ```Gemfile```
+or better, simply add to your ```Gemfile```
 
 ```
 gem 'rufus-lru'
@@ -27,7 +27,6 @@ Once the maxsize is reached, the hash will discard the element that was the
 least recently used (hence LRU).
 
 ```ruby
-require 'rubygems'
 require 'rufus-lru'
 
 h = Rufus::Lru::Hash.new(3)
@@ -44,7 +43,6 @@ puts h.inspect # >> {:newer=>"b", 3=>"aaa", 4=>"aaaa"}
 Rufus::Lru::Hash isn't thread-safe, if you need something that is, use Rufus::Lru::SynchronizedHash
 
 ```ruby
-require 'rubygems'
 require 'rufus-lru'
 
 h = Rufus::Lru::SynchronizedHash.new(3)
@@ -55,20 +53,23 @@ h = Rufus::Lru::SynchronizedHash.new(3)
 It's possible to squeeze LruHash manually:
 
 ```ruby
-h = Rufus::Lru::Hash.new(33, true)
-# or h.squeeze_on_demand=true
-.
-.
+h = Rufus::Lru::Hash.new(33, false)
+  # or
+#h = Rufus::Lru::Hash.new(33)
+#h.auto_squeeze = true
+
+# ...
+
+# when a squeeze is needed...
 h.squeeze!
 ```
 
-If a value has destructor method #clear it may be called upon the key-value removal
+If a value has a destructor method called #clear, it may be called upon the key-value removal
 
 ```ruby
-require 'rubygems'
 require 'rufus-lru'
 
-class ObjectWithDestructor; def clear ; puts 'Destructor called' ; end ; end
+class ObjectWithDestructor; def clear; puts 'Destructor called'; end; end
 
 h = LruHash.new(1, false, true) # or h.clear_value_on_removal=true after h is created
 h[:one] = ObjectWithDestructor.new
