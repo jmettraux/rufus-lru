@@ -72,14 +72,23 @@ module Lru
 
     # Initializes a LruHash with a given maxsize.
     #
-    def initialize(maxsize, auto_squeeze=true, clear_value_on_removal=false)
+    # Options:
+    #
+    # * :auto_squeeze
+    #   defaults to true
+    # * :clear_value_on_removal
+    #   when set to true, the hash makes sure to call #clear on each
+    #   value after it is removed
+    #
+    def initialize(maxsize, opts={})
 
       super()
 
       @maxsize = maxsize
       @lru_keys = []
-      @auto_squeeze = auto_squeeze
-      @clear_value_on_removal = clear_value_on_removal
+
+      @auto_squeeze = opts.has_key?(:auto_squeeze) ? opts[:auto_squeeze] : true
+      @clear_value_on_removal = opts[:clear_value_on_removal]
     end
 
     def maxsize=(i)
@@ -190,7 +199,7 @@ module Lru
   #
   class SynchronizedHash < Rufus::Lru::Hash
 
-    def initialize(maxsize, auto_squeeze=true, clear_value_on_removal=false)
+    def initialize(maxsize, opts={})
 
       super
       @mutex = Mutex.new

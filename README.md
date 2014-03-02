@@ -53,12 +53,12 @@ h = Rufus::Lru::SynchronizedHash.new(3)
 It's possible to squeeze LruHash manually:
 
 ```ruby
-h = Rufus::Lru::Hash.new(33, false)
+h = Rufus::Lru::Hash.new(33, :auto_squeeze => false)
   # or
 #h = Rufus::Lru::Hash.new(33)
-#h.auto_squeeze = true
+#h.auto_squeeze = false
 
-# ...
+# ... values keep accumulating ...
 
 # when a squeeze is needed...
 h.squeeze!
@@ -71,9 +71,10 @@ require 'rufus-lru'
 
 class ObjectWithDestructor; def clear; puts 'Destructor called'; end; end
 
-h = LruHash.new(1, false, true) # or h.clear_value_on_removal=true after h is created
+h = LruHash.new(1, :clear_value_on_removal => true)
+
 h[:one] = ObjectWithDestructor.new
-h[:two] = nil                   # :one is being removed >> "Destructor called"
+h[:two] = nil # :one is being removed >> "Destructor called"
 ```
 
 
