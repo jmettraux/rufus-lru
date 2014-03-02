@@ -168,11 +168,11 @@ describe Rufus::Lru::Hash do
     end
   end
 
-  context 'handling values with destructors' do
+  describe '#on_removal=' do
 
-    it 'calls value#clear upon key-value removal' do
+    it 'accepts a Symbol (name of the meth to call on the just removed values)' do
 
-      hash.clear_value_on_removal = true
+      hash.on_removal = :clear
       destructor_was_called = 0
 
       value = 'nada'
@@ -187,6 +187,21 @@ describe Rufus::Lru::Hash do
 
       hash.clear
       destructor_was_called.should == 5
+    end
+
+    it 'accepts a lambda (to be called each time a value is removed)' do
+
+      destroyed = []
+      hash.on_removal = lambda { |val| destroyed << val }
+
+      5.times { |i| hash[i] = "item#{i}" }
+      destroyed.should == %w[ item0 item1 ]
+
+      hash.delete(4)
+      destroyed.should == %w[ item0 item1 item4 ]
+
+      hash.clear
+      destroyed.should == %w[ item0 item1 item4 item2 item3 ]
     end
   end
 end

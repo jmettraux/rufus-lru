@@ -70,15 +70,21 @@ module Lru
     attr_reader :maxsize
     attr_reader :lru_keys
 
+    attr_accessor :on_removal
+
     # Initializes a LruHash with a given maxsize.
     #
     # Options:
     #
     # * :auto_squeeze
     #   defaults to true
-    # * :clear_value_on_removal
-    #   when set to true, the hash makes sure to call #clear on each
-    #   value after it is removed
+    # * :on_removal
+    #   accepts false, a symbol or a lambda.
+    #   * False is the default, values are removed, nothing special happens.
+    #   * A symbol can be used to point to a method like :clear or :destroy
+    #     that has to be called on the value just removed
+    #   * A lambda/proc can be set, it's thus called (and passed the removed
+    #     value as argument) each time a removal occurs
     #
     def initialize(maxsize, opts={})
 
@@ -88,7 +94,7 @@ module Lru
       @lru_keys = []
 
       @auto_squeeze = opts.has_key?(:auto_squeeze) ? opts[:auto_squeeze] : true
-      @clear_value_on_removal = opts[:clear_value_on_removal]
+      @on_removal = opts[:on_removal]
     end
 
     def maxsize=(i)
@@ -105,21 +111,16 @@ module Lru
       @auto_squeeze = b
     end
 
-    def clear_value_on_removal=(b)
+    def auto_squeeze?
 
-      @clear_value_on_removal = b
+      @auto_squeeze
     end
-
-    def auto_squeeze?; @auto_squeeze; end
-    def clear_value_on_removal?; @clear_value_on_removal; end
 
     def clear
 
       @lru_keys.clear
 
-      self.each_value { |value|
-        value.clear if value.respond_to?(:clear)
-      } if @clear_value_on_removal
+      self.each_value { |v| call_on_removal(v) }
 
       super
     end
@@ -155,7 +156,7 @@ module Lru
     def delete(key)
 
       value = super
-      value.clear if @clear_value_on_removal && value.respond_to?(:clear)
+      call_on_removal(value)
 
       @lru_keys.delete(key)
 
@@ -190,6 +191,17 @@ module Lru
 
       while size >= @maxsize
         delete(@lru_keys.delete_at(0))
+      end
+    end
+
+    def call_on_removal(value)
+
+      if ! @on_removal
+        # nothing to do
+      elsif @on_removal.is_a?(Symbol)
+        value.send(@on_removal)
+      else # must be a block
+        @on_removal.call(value)
       end
     end
   end

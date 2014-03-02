@@ -64,18 +64,43 @@ h = Rufus::Lru::Hash.new(33, :auto_squeeze => false)
 h.squeeze!
 ```
 
-If a value has a destructor method called #clear, it may be called upon the key-value removal
+LruHash accepts on initialization a ```:on_removal``` option. It can be set to a Symbol, which is then used as the method name to call on the value just removed:
 
 ```ruby
 require 'rufus-lru'
 
 class ObjectWithDestructor; def clear; puts 'Destructor called'; end; end
 
-h = LruHash.new(1, :clear_value_on_removal => true)
+h = LruHash.new(1, :on_removal => :clear)
 
 h[:one] = ObjectWithDestructor.new
 h[:two] = nil # :one is being removed >> "Destructor called"
 ```
+
+Or it can be set to a lambda:
+
+```ruby
+require 'rufus-lru'
+
+seen = []
+h = Rufus::Lru::Hash.new(
+  1,
+  :on_removal => lambda { |val| seen << val.object_id })
+
+h[:one] = 'abc'
+h[:two] = 'xyz'
+
+# seen ends up with the object_id of the 'abc' String instance...
+```
+
+The value of ```on_removal``` can be set later on.
+
+```ruby
+h.on_removal = :destroy
+h.on_removal = lambda { |val| bodycount += 1 if val.is_a?(Martian) }
+```
+
+`auto_squeeze` and `on_removal` were originally contributed by Gleb Kuzmenko.
 
 
 ## dependencies
