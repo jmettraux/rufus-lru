@@ -1,3 +1,0 @@
-
-[ ] SyncrhonizedHash: synchronize delete?
-
