@@ -1,7 +1,8 @@
 
 # rufus-lru
 
-[![Build Status](https://secure.travis-ci.org/jmettraux/rufus-lru.png)](http://travis-ci.org/jmettraux/rufus-lru)
+[![Build Status](https://secure.travis-ci.org/jmettraux/rufus-lru.svg)](http://travis-ci.org/jmettraux/rufus-lru)
+[![Gem Version](https://badge.fury.io/rb/rufus-lru.svg)](http://badge.fury.io/rb/rufus-lru)
 
 LruHash class, a Hash with a max size, controlled by a LRU mechanism.
 
@@ -129,7 +130,9 @@ irc.freenode.net #ruote
 
 http://github.com/jmettraux/rufus-lru
 
-    git clone git://github.com/jmettraux/rufus-lru.git
+```
+git clone git://github.com/jmettraux/rufus-lru.git
+```
 
 
 ## author
