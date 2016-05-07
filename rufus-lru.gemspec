@@ -28,8 +28,7 @@ LruHash class, a Hash with a max size, controlled by a LRU mechanism
 
   #s.add_runtime_dependency 'tzinfo', '>= 0.3.23'
 
-  s.add_development_dependency 'rake'
-  s.add_development_dependency 'rspec', '>= 2.7.0'
+  s.add_development_dependency 'rspec', '>= 3.4.0'
 
   s.require_path = 'lib'
 end
