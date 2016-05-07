@@ -1,12 +1,17 @@
 
 = rufus-lru CHANGELOG.txt
 
+
 == rufus-lru - 1.0.7    not yet released
+
+- switched from Rake to Make
+
 
 == rufus-lru - 1.0.6    not released
 
 - introduced manual #squeeze!
 - handling values with destructor #clear
+
 
 == rufus-lru - 1.0.5    released 2012/02/28
 
