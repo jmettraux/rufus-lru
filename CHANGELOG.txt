@@ -1,8 +1,9 @@
 
 = rufus-lru CHANGELOG.txt
 
+== rufus-lru - 1.0.7    not yet released
 
-== rufus-lru - 1.0.6    not yet released
+== rufus-lru - 1.0.6    not released
 
 - introduced manual #squeeze!
 - handling values with destructor #clear
