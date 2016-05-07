@@ -21,8 +21,8 @@ LruHash class, a Hash with a max size, controlled by a LRU mechanism
 
   #s.files = `git ls-files`.split("\n")
   s.files = Dir[
-    'Rakefile',
-    'lib/**/*.rb', 'spec/**/*.rb', 'test/**/*.rb',
+    'Makefile',
+    'lib/**/*.rb', #'spec/**/*.rb', 'test/**/*.rb',
     '*.gemspec', '*.txt', '*.rdoc', '*.md'
   ]
 
