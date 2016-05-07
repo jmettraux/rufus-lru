@@ -10,14 +10,14 @@ describe Rufus::Lru::SynchronizedHash do
 
   it 'sports a mutex' do
 
-    hash.instance_variable_get(:@mutex).class.should == Mutex
+    expect(hash.instance_variable_get(:@mutex).class).to eq(Mutex)
   end
 
   it 'works' do
 
     4.times { |i| hash[i] = i }
 
-    hash.size.should == 3
+    expect(hash.size).to eq(3)
   end
 end
 

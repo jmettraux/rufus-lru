@@ -10,7 +10,7 @@ describe LruHash do
 
     2.times { |i| h[i] = i }
 
-    h.size.should == 1
+    expect(h.size).to eq(1)
   end
 end
 

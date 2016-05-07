@@ -12,16 +12,15 @@ describe Rufus::Lru::Hash do
 
       hash[1] = 2
 
-      hash[1].should == 2
+      expect(hash[1]).to eq(2)
     end
 
     it 'supports deletion' do
 
       hash[1] = 2
 
-      hash.delete(1).should == 2
-
-      hash.size.should == 0
+      expect(hash.delete(1)).to eq(2)
+      expect(hash.size).to eq(0)
     end
   end
 
@@ -31,7 +30,7 @@ describe Rufus::Lru::Hash do
 
       4.times { |i| hash[i] = i }
 
-      hash.size.should == 3
+      expect(hash.size).to eq(3)
     end
 
     it 're-inserting under a key places the key at the end of the lru_keys' do
@@ -40,7 +39,7 @@ describe Rufus::Lru::Hash do
 
       hash[0] = :new
 
-      hash.lru_keys.should == [ 1, 2, 0 ]
+      expect(hash.lru_keys).to eq([ 1, 2, 0 ])
     end
 
     it 'removes keys from the lru_keys upon entry deletion' do
@@ -48,7 +47,7 @@ describe Rufus::Lru::Hash do
       hash[1] = 1
       hash.delete(1)
 
-      hash.lru_keys.should == []
+      expect(hash.lru_keys).to eq([])
     end
   end
 
@@ -58,7 +57,7 @@ describe Rufus::Lru::Hash do
 
       3.times { |i| hash[i] = i }
 
-      hash.lru_keys.should == [ 0, 1, 2 ]
+      expect(hash.lru_keys).to eq([ 0, 1, 2 ])
     end
   end
 
@@ -68,7 +67,7 @@ describe Rufus::Lru::Hash do
 
       3.times { |i| hash[i] = i }
 
-      hash.lru_keys.should == [ 0, 1, 2 ]
+      expect(hash.lru_keys).to eq([ 0, 1, 2 ])
     end
   end
 
@@ -76,28 +75,28 @@ describe Rufus::Lru::Hash do
 
     it 'returns nil if there is no value' do
 
-      hash[:x].should == nil
+      expect(hash[:x]).to eq(nil)
     end
 
     it 'returns false when the value is false' do
 
       hash[1] = false
 
-      hash[1].should == false
+      expect(hash[1]).to eq(false)
     end
 
     it 'does not modify the LRU list when looking up a non-present key' do
 
       hash[:x]
 
-      hash.lru_keys.should == []
+      expect(hash.lru_keys).to eq([])
     end
 
     it 'returns the current value' do
 
       hash[1] = 2
 
-      hash[1].should == 2
+      expect(hash[1]).to eq(2)
     end
   end
 
@@ -107,8 +106,8 @@ describe Rufus::Lru::Hash do
 
       hash.merge!(1 => 1, 2 => 2)
 
-      hash.size.should == 2
-      hash.lru_keys.sort.should == [ 1, 2 ]
+      expect(hash.size).to eq(2)
+      expect(hash.lru_keys.sort).to eq([ 1, 2 ])
     end
   end
 
@@ -118,8 +117,8 @@ describe Rufus::Lru::Hash do
 
       4.times { |i| hash[i] = i }
 
-      hash.to_h.class.should == ::Hash
-      hash.to_h.should == { 1 => 1, 2 => 2, 3 => 3 }
+      expect(hash.to_h.class).to eq(::Hash)
+      expect(hash.to_h).to eq({ 1 => 1, 2 => 2, 3 => 3 })
     end
   end
 
@@ -127,7 +126,7 @@ describe Rufus::Lru::Hash do
 
     it 'returns true by default' do
 
-      hash.auto_squeeze?.should == true
+      expect(hash.auto_squeeze?).to eq(true)
     end
   end
 
@@ -136,10 +135,10 @@ describe Rufus::Lru::Hash do
     it 'sets the auto_squeeze behaviour' do
 
       hash.auto_squeeze = false
-      hash.auto_squeeze?.should == false
+      expect(hash.auto_squeeze?).to eq(false)
 
       hash.auto_squeeze = true
-      hash.auto_squeeze?.should == true
+      expect(hash.auto_squeeze?).to eq(true)
     end
 
     it 'squeezes when passed true' do
@@ -147,10 +146,10 @@ describe Rufus::Lru::Hash do
       hash.auto_squeeze = false
 
       5.times { |i| hash[i] = i }
-      hash.size.should == 5
+      expect(hash.size).to eq(5)
 
       hash.auto_squeeze = true
-      hash.size.should == 2
+      expect(hash.size).to eq(2)
     end
   end
 
@@ -161,10 +160,10 @@ describe Rufus::Lru::Hash do
       hash.auto_squeeze = false
 
       5.times { |i| hash[i] = i }
-      hash.size.should == 5
+      expect(hash.size).to eq(5)
 
       hash.squeeze!
-      hash.size.should == 2
+      expect(hash.size).to eq(2)
     end
   end
 
@@ -180,13 +179,13 @@ describe Rufus::Lru::Hash do
         :define_method, :clear, lambda { destructor_was_called += 1 })
 
       5.times { |i| hash[i] = value }
-      destructor_was_called.should == 2
+      expect(destructor_was_called).to eq(2)
 
       hash.delete 4
-      destructor_was_called.should == 3
+      expect(destructor_was_called).to eq(3)
 
       hash.clear
-      destructor_was_called.should == 5
+      expect(destructor_was_called).to eq(5)
     end
 
     it 'accepts a lambda (to be called each time a value is removed)' do
@@ -195,13 +194,13 @@ describe Rufus::Lru::Hash do
       hash.on_removal = lambda { |val| destroyed << val }
 
       5.times { |i| hash[i] = "item#{i}" }
-      destroyed.should == %w[ item0 item1 ]
+      expect(destroyed).to eq(%w[ item0 item1 ])
 
       hash.delete(4)
-      destroyed.should == %w[ item0 item1 item4 ]
+      expect(destroyed).to eq(%w[ item0 item1 item4 ])
 
       hash.clear
-      destroyed.should == %w[ item0 item1 item4 item2 item3 ]
+      expect(destroyed).to eq(%w[ item0 item1 item4 item2 item3 ])
     end
   end
 end
