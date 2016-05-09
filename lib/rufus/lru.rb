@@ -109,8 +109,7 @@ module Lru
 
     def auto_squeeze=(b)
 
-      squeeze! if b
-      @auto_squeeze = b
+      squeeze! if (@auto_squeeze = b)
     end
 
     def auto_squeeze?
@@ -142,7 +141,7 @@ module Lru
 
     def []=(key, value)
 
-      remove_lru if @auto_squeeze
+      do_squeeze! if @auto_squeeze
       touch(key)
 
       super
@@ -172,8 +171,7 @@ module Lru
       {}.merge!(self)
     end
 
-    # public alias to remove_lru
-    def squeeze!; remove_lru; end
+    def squeeze!; do_squeeze!; end
 
     protected
 
@@ -189,7 +187,7 @@ module Lru
     # Makes sure that the hash fits its maxsize. If not, will remove
     # the least recently used items.
     #
-    def remove_lru
+    def do_squeeze!
 
       while size >= @maxsize
         delete(@lru_keys.delete_at(0))
@@ -231,7 +229,7 @@ module Lru
 
     def squeeze!
 
-      @mutex.synchronize { super }
+      @mutex.synchronize { do_squeeze! }
     end
   end
 end

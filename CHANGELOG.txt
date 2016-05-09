@@ -4,6 +4,7 @@
 
 == rufus-lru - 1.0.8    not yet released
 
+- rename #remove_lru to #do_squeeze!
 - raise ArgumentError if maxsize < 0
 
 
