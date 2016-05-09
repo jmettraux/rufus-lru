@@ -4,6 +4,8 @@
 
 == rufus-lru - 1.0.8    not yet released
 
+- raise ArgumentError if maxsize < 0
+
 
 == rufus-lru - 1.0.7    released 2016/05/07
 

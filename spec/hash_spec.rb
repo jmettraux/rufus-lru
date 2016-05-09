@@ -51,6 +51,16 @@ describe Rufus::Lru::Hash do
     end
   end
 
+  describe '#initialize' do
+
+    it 'fails when the maxsize is negative' do
+
+      expect {
+        Rufus::Lru::Hash.new(-1)
+      }.to raise_error(ArgumentError, "maxsize must be >= 0")
+    end
+  end
+
   describe '#lru_keys' do
 
     it 'returns the keys with the least recently used first' do

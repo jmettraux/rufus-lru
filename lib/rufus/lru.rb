@@ -88,6 +88,8 @@ module Lru
     #
     def initialize(maxsize, opts={})
 
+      fail ArgumentError.new("maxsize must be >= 0") if maxsize < 0
+
       super()
 
       @maxsize = maxsize
