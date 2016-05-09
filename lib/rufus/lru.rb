@@ -142,9 +142,8 @@ module Lru
     def []=(key, value)
 
       super
-
-      do_squeeze! if @auto_squeeze
       touch(key)
+      do_squeeze! if @auto_squeeze
     end
 
     def merge!(hash)
