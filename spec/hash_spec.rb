@@ -159,7 +159,7 @@ describe Rufus::Lru::Hash do
       expect(hash.size).to eq(5)
 
       hash.auto_squeeze = true
-      expect(hash.size).to eq(2)
+      expect(hash.size).to eq(3)
     end
   end
 
@@ -173,7 +173,7 @@ describe Rufus::Lru::Hash do
       expect(hash.size).to eq(5)
 
       hash.squeeze!
-      expect(hash.size).to eq(2)
+      expect(hash.size).to eq(3)
     end
   end
 

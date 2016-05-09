@@ -141,10 +141,10 @@ module Lru
 
     def []=(key, value)
 
+      super
+
       do_squeeze! if @auto_squeeze
       touch(key)
-
-      super
     end
 
     def merge!(hash)
@@ -189,8 +189,8 @@ module Lru
     #
     def do_squeeze!
 
-      while size >= @maxsize
-        delete(@lru_keys.delete_at(0))
+      while size > @maxsize
+        delete(@lru_keys.shift)
       end
     end
 
