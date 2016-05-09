@@ -2,6 +2,11 @@
 = rufus-lru CHANGELOG.txt
 
 
+== rufus-lru - 1.1.1    not yet released
+
+- synchronize SynchronizedHash#clear
+
+
 == rufus-lru - 1.1.0    released 2016/05/09
 
 - respect maxsize (3 is 3, not 2) (hence the 1.1.x)

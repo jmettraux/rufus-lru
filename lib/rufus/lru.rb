@@ -28,7 +28,7 @@ require 'thread'
 module Rufus
 module Lru
 
-  VERSION = '1.1.0'
+  VERSION = '1.1.1'
 
   #
   # A Hash that has a max size. After the maxsize has been reached, the
@@ -222,6 +222,11 @@ module Lru
     end
 
     def []=(key, value)
+
+      @mutex.synchronize { super }
+    end
+
+    def clear
 
       @mutex.synchronize { super }
     end
