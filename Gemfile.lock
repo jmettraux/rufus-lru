@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    rufus-lru (1.0.7)
+    rufus-lru (1.0.8)
 
 GEM
   remote: https://rubygems.org/

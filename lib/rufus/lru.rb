@@ -28,7 +28,7 @@ require 'thread'
 module Rufus
 module Lru
 
-  VERSION = '1.0.7'
+  VERSION = '1.0.8'
 
   #
   # A Hash that has a max size. After the maxsize has been reached, the

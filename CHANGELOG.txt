@@ -2,6 +2,9 @@
 = rufus-lru CHANGELOG.txt
 
 
+== rufus-lru - 1.0.8    not yet released
+
+
 == rufus-lru - 1.0.7    released 2016/05/07
 
 - modernized spec/
