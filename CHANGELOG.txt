@@ -2,7 +2,7 @@
 = rufus-lru CHANGELOG.txt
 
 
-== rufus-lru - 1.1.0    not yet released
+== rufus-lru - 1.1.0    released 2016/05/09
 
 - respect maxsize (3 is 3, not 2) (hence the 1.1.x)
 - rename #remove_lru to #do_squeeze!
