@@ -21,9 +21,11 @@ LruHash class, a Hash with a max size, controlled by a LRU mechanism
 
   #s.files = `git ls-files`.split("\n")
   s.files = Dir[
+    'README.{md,txt}',
+    'CHANGELOG.{md,txt}', 'CREDITS.{md,txt}', 'LICENSE.{md,txt}',
     'Makefile',
     'lib/**/*.rb', #'spec/**/*.rb', 'test/**/*.rb',
-    '*.gemspec', '*.txt', '*.rdoc', '*.md'
+    "#{s.name}.gemspec",
   ]
 
   #s.add_runtime_dependency 'tzinfo', '>= 0.3.23'
