@@ -10,8 +10,7 @@ Gem::Specification.new do |s|
   s.platform = Gem::Platform::RUBY
   s.authors = [ 'John Mettraux' ]
   s.email = [ 'jmettraux@gmail.com' ]
-  s.homepage = 'http://github.com/jmettraux/rufus-lru'
-  s.rubyforge_project = 'rufus'
+  s.homepage = 'https://github.com/jmettraux/rufus-lru'
   s.license = 'MIT'
   s.summary = 'A Hash with a max size, controlled by a LRU mechanism'
 
